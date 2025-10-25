@@ -1,0 +1,625 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacktoberfest Hackathon Hacker Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #A080FF;
+            --primary-dark: #8B6FFF;
+            --secondary: #A080FF;
+            --accent: #A080FF;
+            --purple: #A080FF;
+            --cyan: #A080FF;
+            --text: #ffffff;
+            --text-light: #ffffff;
+            --bg: #1C1C3F;
+            --bg-dark: #0F0F2A;
+            --bg-light: #2A2A5F;
+            --border: #3A3A7F;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--purple) 50%, var(--secondary) 100%);
+            --gradient-alt: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 50%, var(--purple) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg);
+            color: white;
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A080FF' fill-opacity='0.05'%3E%3Cpath d='M0 0h40v40H0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: slideUp 1s ease 0.2s forwards;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: slideUp 1s ease 0.4s forwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: transparent;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideUp 1s ease 0.6s forwards;
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Main Content */
+        main {
+            padding: 80px 0;
+        }
+
+        .section {
+            margin-bottom: 80px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-light);
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Lists */
+        .modern-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modern-list li {
+            background: var(--bg-light);
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .modern-list li:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-lg);
+            border-left-color: var(--primary);
+        }
+
+        .modern-list li strong {
+            color: var(--primary);
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: var(--bg-light);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .highlight-box h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .highlight-box a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .highlight-box a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .requirement-item {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .requirement-item:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--primary);
+        }
+
+        .requirement-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* Prizes */
+        .prizes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .prize-card {
+            background: var(--bg-light);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .prize-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: sparkle 10s linear infinite;
+        }
+
+        @keyframes sparkle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .prize-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(160, 128, 255, 0.3);
+        }
+
+        .prize-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            color: var(--primary);
+        }
+
+        .prize-number {
+            font-size: 3rem;
+            font-weight: 800;
+            opacity: 0.2;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .powered-by-text {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .footer-images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+        }
+
+        .footer-image {
+            max-width: 150px;
+            height: auto;
+            max-height: 80px;
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            .footer-images {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .footer-image {
+                max-width: 120px;
+                max-height: 60px;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="hero">
+                <h1>Hacktoberfest Hackathon Hacker Guide</h1>
+                <p>Build innovative open-source projects with DigitalOcean and win amazing prizes</p>
+                <a href="forms.gle/wdoanp6z4a2t7ecu6" class="cta-button" target="_blank">Submit Your Project</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section" id="about">
+            <h2 class="section-title">About the Hackathon</h2>
+            <div class="section-content">
+                <p>With this year's theme being around <strong>OPEN SOURCE & AI</strong>, this hackathon will focus on building an open-source project that leverages platforms like <a href="https://www.digitalocean.com/products/gradient/platform" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">DigitalOcean's Gradient AI Platform</a> (along with any tech stack of your choice) to solve an interesting real-world problem or demonstrate a novel ML/AI experience in the space of open source.</p>
+                
+                
+            </div>
+        </section>
+
+        <section class="section" id="guidelines">
+            <h2 class="section-title">Participation Guidelines</h2>
+            <ul class="modern-list">
+                <li>Open to <strong>individuals and teams</strong> (max 3 people)</li>
+                <li>Projects <strong>must be public GitHub repositories</strong> and open-source (choose a permissive license like MIT, Apache-2.0, or CC0)</li>
+                <li>Participants must <strong>submit their GitHub repo URL</strong> via the submission form</li>
+            </ul>
+        </section>
+
+        <section class="section" id="resources">
+            <h2 class="section-title">Resources & Tech Stack</h2>
+            <div class="section-content">
+                <p>You are free to explore, experiment, and build with any set of tools that help bring your idea to life. Think of your project as a complete stack — from AI/ML capabilities to deployment, hosting, and scaling.</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>AI and Model Development</h3>
+                    <p><strong>Gradient AI Platform</strong> — A managed platform to build and deploy AI agents, use serverless inference, and connect knowledge bases for RAG.</p>
+                </div>
+                <div class="card">
+                    <h3>Infrastructure and Hosting</h3>
+                    <p><strong>Droplets, App Platform, Kubernetes (DOKS)</strong> — Run web apps, APIs, model inference servers, or orchestrate complex workloads.</p>
+                </div>
+                <div class="card">
+                    <h3>Data and Storage</h3>
+                    <p><strong>Spaces, Managed Databases</strong> — Store datasets, model artifacts, or use managed PostgreSQL, MongoDB, MySQL for persistent storage.</p>
+                </div>
+                <div class="card">
+                    <h3>Observability and Deployment</h3>
+                    <p><strong>Serverless Functions, Monitoring</strong> — Build lightweight APIs or integrate with observability tools like Prometheus and Grafana.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h3>Helpful Resources</h3>
+                <ul class="modern-list">
+                    <li><a href="https://docs.digitalocean.com/products/gradient-ai-platform/" target="_blank">Gradient AI Documentation</a> (agents, serverless inference, knowledge bases)</li>
+                    <li><a href="https://docs.digitalocean.com/" target="_blank">DigitalOcean Docs</a>: App Platform, Droplets, Kubernetes, Databases, Spaces</li>
+                    <li><a href="https://www.digitalocean.com/community/tutorials" target="_blank">Community tutorials</a> on building full-stack AI apps</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="ideas">
+            <h2 class="section-title">Project Ideas</h2>
+            <div class="section-content">
+                <p>This hackathon is open theme! You're free to build anything you want, as long as it's open-source and submitted on GitHub. Here are some ideas to get you started:</p>
+            </div>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>🎓 AI-Powered Study Assistant</h3>
+                    <p>A tool that summarizes research papers, generates quizzes, or creates flashcards to help students learn faster.</p>
+                </div>
+                <div class="card">
+                    <h3>🛡️ Responsible AI Content Filter</h3>
+                    <p>An agent that detects bias, harmful language, or misinformation in generated text and provides safer alternatives.</p>
+                </div>
+                <div class="card">
+                    <h3>💬 Community Knowledge Bot</h3>
+                    <p>A chatbot that uses knowledge bases (documents, FAQs, or websites) to answer questions about a community, event, or product.</p>
+                </div>
+                <div class="card">
+                    <h3>🎮 AI-Powered Fun Game</h3>
+                    <p>A text adventure or trivia game where an agent adapts questions, storylines, or jokes based on the player's input.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="requirements">
+            <h2 class="section-title">Submission Requirements</h2>
+            <div class="section-content">
+                <p>Each submission <strong>must</strong> include the following files in your GitHub repository:</p>
+            </div>
+            
+            <div class="requirements-grid">
+                <div class="requirement-item">
+                    <strong>README.md</strong>
+                    <p>Project summary, live demo link (if applicable), setup + run steps, expected inputs/outputs</p>
+                </div>
+                <div class="requirement-item">
+                    <strong>LICENSE</strong>
+                    <p>e.g., MIT or Apache-2.0</p>
+                </div>
+                <div class="requirement-item">
+                    <strong>CONTRIBUTING.md</strong>
+                    <p>Short guide to run, test, and contribute</p>
+                </div>
+                <div class="requirement-item">
+                    <strong>CODE_OF_CONDUCT.md</strong>
+                    <p>Standard contributor code of conduct</p>
+                </div>
+                <div class="requirement-item">
+                    <strong>Environment Setup</strong>
+                    <p>requirements.txt / environment.yml or Dockerfile for reproducible environment</p>
+                </div>
+                <div class="requirement-item">
+                    <strong>Demo (Optional)</strong>
+                    <p>demo.gif or short video link (highly recommended)</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="judging">
+            <h2 class="section-title">Judging Criteria</h2>
+            <div class="section-content">
+                <p>Your projects will be judged by a short <strong>10 minute presentation</strong> that you will showcase after the hacking period is over. The judges will score you based on these metrics:</p>
+            </div>
+            
+            <ul class="modern-list">
+                <li><strong>Use of AI platform</strong> — How effectively you leverage the AI platform capabilities</li>
+                <li><strong>Completeness of the solution</strong> — How well-rounded and finished your project is</li>
+                <li><strong>Impact</strong> — The potential real-world impact and usefulness of your solution</li>
+                <li><strong>UI and UX</strong> — User experience and interface design quality</li>
+            </ul>
+        </section>
+
+        
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="powered-by-text">Powered by</p>
+            <div class="footer-images">
+                <img src="./DO_Logo_Horizontal_White.png" alt="Hacktoberfest Logo with Sponsors" class="footer-image" />
+                <img src="./HF-Horizontal-Monochrome-Light.png" alt="Hacktoberfest Horizontal Logo" class="footer-image" />
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll animation for sections
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Add fade-in animation to body
+        document.body.classList.add('fade-in');
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add subtle parallax effect to hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
