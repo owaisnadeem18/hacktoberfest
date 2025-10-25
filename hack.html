@@ -73,6 +73,9 @@
         }
 
         .hero {
+            /* Use normal flow to avoid overlapping the following sections.
+               Sticky positioning without a top value and a translated parent
+               caused the hero to visually overlap/collapse with the next section. */
             position: relative;
             z-index: 1;
             text-align: center;
@@ -573,8 +576,8 @@
         <div class="container">
             <p class="powered-by-text">Powered by</p>
             <div class="footer-images">
-                <img src="./DO_Logo_Horizontal_White.png" alt="Hacktoberfest Logo with Sponsors" class="footer-image" />
-                <img src="./HF-Horizontal-Monochrome-Light.png" alt="Hacktoberfest Horizontal Logo" class="footer-image" />
+                <img height="auto" width="55px" src="https://hacktoberfest.com/_next/static/media/digitalocean.77cf30bf.svg" alt="Hacktoberfest Logo with Sponsors" class="footer-image" />
+                <img height="auto" width="865px" src="https://hacktoberfest.com/_next/static/media/logo-hacktoberfest-12--nav.0ac01b46.svg" alt="Hacktoberfest Horizontal Logo" class="footer-image" />
             </div>
         </div>
     </footer>
@@ -616,14 +619,6 @@
             });
         });
 
-        // Add subtle parallax effect to hero
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const header = document.querySelector('header');
-            if (header) {
-                header.style.transform = `translateY(${scrolled * 0.5}px)`;
-            }
-        });
     </script>
 </body>
 </html>
